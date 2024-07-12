@@ -3,7 +3,6 @@ import path from 'node:path'
 import {
   type Plugin,
   defineConfig,
-  normalizePath,
 } from 'vite'
 import electron from 'vite-plugin-electron/simple'
 import vue from '@vitejs/plugin-vue'
@@ -11,7 +10,7 @@ import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(({ command }) => {
   const isServe = command === 'serve'
@@ -39,6 +38,31 @@ export default defineConfig(({ command }) => {
         },
       }),
       bindingSqlite3({ command }),
+      AutoImport({
+        resolvers: [
+          AntDesignVueResolver(),
+          // 自动导入图标组件
+          IconsResolver({
+            prefix: 'Icon',
+          })
+        ],
+        imports: ['vue'],
+        dts: path.resolve(__dirname, 'types/auto-imports.d.ts')
+      }),
+      Components({
+        resolvers: [
+          AntDesignVueResolver(),
+          // 自动注册图标组件
+          IconsResolver({
+            enabledCollections: ['ep'],
+          })
+        ],
+        dts: path.resolve(__dirname, 'types/components.d.ts')
+      }),
+      //补充一个图标的导入配置
+      Icons({
+        autoInstall: true,
+      }),
     ],
   }
 })

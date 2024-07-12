@@ -2,6 +2,9 @@
 .env
 .history
 
+types/auto-imports.d.ts
+types/components.d.ts
+
 node_modules
 dist
 dist-electron
