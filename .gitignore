@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.history
+
+node_modules
+dist
+dist-electron
+dist-native
+release
