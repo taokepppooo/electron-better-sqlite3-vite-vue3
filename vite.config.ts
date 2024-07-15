@@ -12,7 +12,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command }) => { 
   const isServe = command === 'serve'
 
   return {

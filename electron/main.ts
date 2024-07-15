@@ -1,16 +1,9 @@
 import path from 'path'
 import { app, BrowserWindow, ipcMain } from 'electron'
+import log from 'electron-log/main';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
-// The built directory structure
-//
-// ├─┬ dist
-// │ ├─┬ electron
-// │ │ ├── main.js
-// │ │ └── preload.js
-// │ ├── index.html
-// │ ├── ...other-static-files-from-public
-// │
+
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
@@ -20,9 +13,6 @@ if (!app.requestSingleInstanceLock()) {
   app.quit()
   process.exit(0)
 }
-
-// For better-sqlite3 initialize of Renderer process
-ipcMain.handle('get-database-path', () => path.join(app.getPath('userData'), 'better-sqlite3.sqlite3'))
 
 let win: BrowserWindow | null
 
