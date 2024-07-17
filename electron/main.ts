@@ -1,8 +1,10 @@
+import 'reflect-metadata';
 import path from 'path'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import log from 'electron-log/main';
 import { AppDataSource } from './data-source'
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+import { User } from './entities/User';
 
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged
@@ -18,6 +20,14 @@ let win: BrowserWindow | null
 
 async function createWindow() {
   await AppDataSource.initialize()
+
+  const userRepository = AppDataSource.getRepository(User);
+
+  const newUser = new User();
+  newUser.firstName = 'John Doe';
+  newUser.age = 25;
+  await userRepository.save(newUser);
+  console.log('New user has been saved.');
 
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),

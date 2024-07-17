@@ -5,11 +5,13 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "allowJs": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true,  
+    "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-  },
+  },  
+  "exclude": ["node_modules", "dist", "dist-electron", "dist-native", "release"]
 }
