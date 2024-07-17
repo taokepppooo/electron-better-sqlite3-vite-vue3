@@ -11,7 +11,6 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-import commonjs from '@rollup/plugin-commonjs'
 import dotenv from 'dotenv'
 import virtual from 'vite-plugin-virtual';  
 
@@ -22,7 +21,7 @@ export default defineConfig(({ command }) => {
     build: {
       minify: false,
       rollupOptions: {
-        external: ['@sap/hana-client', 'better-sqlite3'],
+        external: ['@sap/hana-client', 'typeorm', 'better-sqlite3'],
       }
     },
     plugins: [
@@ -34,11 +33,10 @@ export default defineConfig(({ command }) => {
             build: {
               minify: false,
               rollupOptions: {
-                external: ['@sap/hana-client', 'better-sqlite3'],
+                external: ['@sap/hana-client', 'typeorm', 'better-sqlite3'],
               },
             },
             plugins: [
-              commonjs(),
               virtual({
                 'virtual:empty-module': 'export default {};'
               })
@@ -61,6 +59,9 @@ export default defineConfig(({ command }) => {
                 'sql.js': 'virtual:empty-module',
               }
             },
+            optimizeDeps: {
+              exclude: ['@sap/hana-client', 'typeorm', 'better-sqlite3'],
+            }
           }
         },
         preload: {
@@ -68,7 +69,6 @@ export default defineConfig(({ command }) => {
         },
         renderer: {},
       }),
-      commonjs(),
       bindingSqlite3({ command }),
       AutoImport({
         resolvers: [
@@ -93,6 +93,9 @@ export default defineConfig(({ command }) => {
         autoInstall: true,
       })
     ],
+    optimizeDeps: {
+      exclude: ['@sap/hana-client', 'typeorm', 'better-sqlite3'],
+    }
   }
 })
 
