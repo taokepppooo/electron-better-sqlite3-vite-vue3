@@ -1,7 +1,7 @@
 import path from 'path'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import log from 'electron-log/main';
-
+import { AppDataSource } from './data-source'
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 process.env.DIST = path.join(__dirname, '../dist')
@@ -16,7 +16,9 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null
 
-function createWindow() {
+async function createWindow() {
+  await AppDataSource.initialize()
+
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
     webPreferences: {

@@ -11,37 +11,68 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import commonjs from '@rollup/plugin-commonjs'
+import dotenv from 'dotenv'
+import virtual from 'vite-plugin-virtual';  
 
-export default defineConfig(({ command }) => { 
-  const isServe = command === 'serve'
+dotenv.config()
 
+export default defineConfig(({ command }) => {
   return {
     build: {
       minify: false,
-      commonjsOptions: {
-        ignoreDynamicRequires: true,
-      },
+      rollupOptions: {
+        external: ['@sap/hana-client', 'better-sqlite3'],
+      }
     },
     plugins: [
       vue(),
       electron({
         main: {
           entry: 'electron/main.ts',
+          vite: {
+            build: {
+              minify: false,
+              rollupOptions: {
+                external: ['@sap/hana-client', 'better-sqlite3'],
+              },
+            },
+            plugins: [
+              commonjs(),
+              virtual({
+                'virtual:empty-module': 'export default {};'
+              })
+            ],
+            resolve: {
+              alias: {
+                '@google-cloud/spanner': 'virtual:empty-module',
+                'mongodb': 'virtual:empty-module',
+                'hdb-pool': 'virtual:empty-module',
+                'mssql': 'virtual:empty-module',
+                'mysql': 'virtual:empty-module',
+                'mysql2': 'virtual:empty-module',
+                'oracledb': 'virtual:empty-module',
+                'pg': 'virtual:empty-module',
+                'pg-native': 'virtual:empty-module',
+                'pg-query-stream': 'virtual:empty-module',
+                'typeorm-aurora-data-api-driver': 'virtual:empty-module',
+                'redis': 'virtual:empty-module',
+                'ioredis': 'virtual:empty-module',
+                'sql.js': 'virtual:empty-module',
+              }
+            },
+          }
         },
         preload: {
           input: path.join(__dirname, 'electron/preload.ts'),
         },
-        renderer: {
-          resolve: isServe ? {
-            'better-sqlite3': { type: 'cjs' },
-          } : undefined,
-        },
+        renderer: {},
       }),
+      commonjs(),
       bindingSqlite3({ command }),
       AutoImport({
         resolvers: [
           AntDesignVueResolver(),
-          // 自动导入图标组件
           IconsResolver({
             prefix: 'Icon',
           })
@@ -52,17 +83,15 @@ export default defineConfig(({ command }) => {
       Components({
         resolvers: [
           AntDesignVueResolver(),
-          // 自动注册图标组件
           IconsResolver({
             enabledCollections: ['ep'],
           })
         ],
         dts: path.resolve(__dirname, 'types/components.d.ts')
       }),
-      //补充一个图标的导入配置
       Icons({
         autoInstall: true,
-      }),
+      })
     ],
   }
 })
