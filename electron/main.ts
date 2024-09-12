@@ -1,9 +1,8 @@
 import 'reflect-metadata'
 import path from 'node:path'
 import { app, BrowserWindow } from 'electron'
-import { AppDataSource } from './data-source'
 import log from 'electron-log/main';
-import { User } from './entities/User';
+import { UserController } from './controller/UserController';
 
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged
@@ -18,16 +17,8 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null
 
 async function createWindow() {
-  try {
-    await AppDataSource.initialize()
-    const userRepository = AppDataSource.getRepository(User)
-    await userRepository.save({
-      firstName: 'John Doe',
-      age: 25
-    })
-  } catch (error) {
-    log.info("database initialize", error)
-  }
+  const userController = new UserController();
+  await userController.save({ id: 7, firstName: 'John Doe2', age: 12 });
 
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
