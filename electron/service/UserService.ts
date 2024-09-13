@@ -1,13 +1,13 @@
-import { UserRepository } from '../repository/UserRepository';
-import { User } from '../entities/User';  
+import type { User } from '../entities/User'
+import { UserRepository } from '../repository/UserRepository'
 
 class UserService {
-  private userRepository = new UserRepository();
+  private userRepository = new UserRepository()
 
-  async save(user: User) {
-    const repository = await this.userRepository.getRepository();
-    repository.save(user);
+  async save(user: User): Promise<void> {
+    const repository = await this.userRepository.getRepository()
+    repository.save(user)
   }
 }
 
-export const userService = new UserService();
+export const userService = new UserService()

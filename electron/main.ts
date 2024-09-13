@@ -1,11 +1,10 @@
-import 'reflect-metadata'
 import path from 'node:path'
+import process from 'node:process'
 import { app, BrowserWindow, ipcMain } from 'electron'
-import log from 'electron-log/main';
-import { UserController } from './controller/UserController';
-import { createServer } from './sftp/server';
-import { connectClient } from './sftp/client';
 import { scanNetwork } from './net'
+import { connectClient } from './sftp/client'
+import { createServer } from './sftp/server'
+import 'reflect-metadata'
 
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged
@@ -19,14 +18,14 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null
 
-async function createWindow() {
-  await createServer();
+async function createWindow(): Promise<void> {
+  await createServer()
   ipcMain.on('connect-client', async () => {
-    await connectClient();
-  });
+    await connectClient()
+  })
   ipcMain.on('scan-network', async () => {
-    await scanNetwork();
-  });
+    await scanNetwork()
+  })
 
   // const userController = new UserController();
   // await userController.save({ id: 7, firstName: 'John Doe2', age: 12 });
@@ -41,13 +40,14 @@ async function createWindow() {
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', (new Date).toLocaleString())
+    win?.webContents.send('main-process-message', (new Date()).toLocaleString())
   })
 
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL)
     win.webContents.openDevTools()
-  } else {
+  }
+  else {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, 'index.html'))
   }

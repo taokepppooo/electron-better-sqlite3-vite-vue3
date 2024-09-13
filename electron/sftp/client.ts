@@ -1,10 +1,8 @@
-import ftp from 'basic-ftp';
+import ftp from 'basic-ftp'
 
-export const connectClient = async () => {
-  console.log('connectClient');
-
-  const client = new ftp.Client();
-  client.ftp.verbose = true;
+export async function connectClient(): Promise<void> {
+  const client = new ftp.Client()
+  client.ftp.verbose = true
 
   try {
     await client.access({
@@ -12,11 +10,13 @@ export const connectClient = async () => {
       port: 50021,
       user: 'admin',
       password: '123456',
-      secure: false
-    });
+      secure: false,
+    })
 
-    await client.uploadFrom('package.json', 'packagewssss.json');
-  } catch (err) {
-    console.log(err);
+    await client.uploadFrom('package.json', 'packagewssss.json')
+  }
+  catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err)
   }
 }

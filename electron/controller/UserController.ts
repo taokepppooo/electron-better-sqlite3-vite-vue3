@@ -1,8 +1,8 @@
-import { userService } from "../service/UserService";
-import { User } from '../entities/User';  
+import type { User } from '../entities/User'
+import { userService } from '../service/UserService'
 
 export class UserController {
-  async save(user: User) {
-    return userService.save(user);
+  async save(user: User): Promise<void> {
+    return userService.save(user)
   }
 }

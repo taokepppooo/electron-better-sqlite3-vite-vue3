@@ -1,8 +1,8 @@
-import { BaseRepository } from './BaseRepository';
-import { User } from '../entities/User';
+import { User } from '../entities/User'
+import { BaseRepository } from './BaseRepository'
 
 export class UserRepository extends BaseRepository<User> {
   constructor() {
-    super(User);
+    super(User)
   }
-}  
+}

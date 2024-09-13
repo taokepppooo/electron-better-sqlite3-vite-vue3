@@ -7,12 +7,15 @@
   "scripts": {
     "dev": "chcp 65001 && vite",
     "build": "vite build && electron-builder",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "rebuild:better-sqlite3": "electron-rebuild -f -w -t dev better-sqlite3 --arch=x64",
     "rebuild:better-sqlite3:win32": "electron-rebuild -f -w -t dev better-sqlite3 --arch=ia32",
     "postinstall": "electron-builder install-app-deps",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^3.6.0",
     "@iconify-json/ep": "^1.1.15",
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^20.14.10",
@@ -21,6 +24,7 @@
     "electron": "^31.1.0",
     "electron-builder": "^24.13.3",
     "electron-rebuild": "^3.2.9",
+    "eslint": "^9.10.0",
     "typescript": "^5.5.3",
     "unplugin-auto-import": "^0.18.0",
     "unplugin-icons": "^0.19.0",

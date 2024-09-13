@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ipcRenderer } from 'electron'
 
-const handleClick = () => {
-  console.log('click')
+function handleClick(): void {
   // ipcRenderer.send('connect-client')
   ipcRenderer.send('scan-network')
 }
@@ -10,7 +9,9 @@ const handleClick = () => {
 
 <template>
   2222
-  <button @click="handleClick">click</button>
+  <button @click="handleClick">
+    click
+  </button>
 </template>
 
 <style scoped>
