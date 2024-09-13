@@ -9,5 +9,5 @@ export class User {
     firstName: string
 
     @Column({ type: 'int' })
-    age?: number
+    age: number
 }

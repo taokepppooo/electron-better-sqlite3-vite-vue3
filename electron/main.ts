@@ -1,8 +1,11 @@
 import 'reflect-metadata'
 import path from 'node:path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import log from 'electron-log/main';
 import { UserController } from './controller/UserController';
+import { createServer } from './sftp/server';
+import { connectClient } from './sftp/client';
+import { scanNetwork } from './net'
 
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged
@@ -17,8 +20,16 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null
 
 async function createWindow() {
-  const userController = new UserController();
-  await userController.save({ id: 7, firstName: 'John Doe2', age: 12 });
+  await createServer();
+  ipcMain.on('connect-client', async () => {
+    await connectClient();
+  });
+  ipcMain.on('scan-network', async () => {
+    await scanNetwork();
+  });
+
+  // const userController = new UserController();
+  // await userController.save({ id: 7, firstName: 'John Doe2', age: 12 });
 
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'logo.svg'),
